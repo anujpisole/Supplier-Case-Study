@@ -38,3 +38,44 @@ select distinct name , s.city from
 suppliermaster s join supldetl sd 
 on s.sid = sd.sid 
 where s.city != sd.city order by name;
+
+-- Q.6. List the names of the parts which have not been supplied in the month of May 2019.
+
+select distinct p.name from
+partmaster p join supldetl s
+on p.pid = s.pid 
+where month(dos) != 5 and year(dos) != 2019;
+
+-- Q.7. List name and Price category for all parts. Price category has to be displayed as “Cheap”
+--  -- if price is less than 200, “Medium” if the price is greater than or equal to 200 and less than 500, -- and “Costly” if the price is greater than or equal to 500.
+
+select name,price ,
+case
+	when price < 200 then "Cheap"
+    when  500 <= price >= 200 then "Medium"
+    else "Costly"
+    end as price_category
+from partmaster;
+
+-- Q.8. List the names of the suppliers who have supplied exactly 100 units of part P16.
+
+select name from suppliermaster where sid in (
+select sid from supldetl where QTYSUPPLIED = 100  and pid = 16
+);
+
+-- Q.9. List the names of the parts whose price is more than the average price of parts.
+
+with cte as (
+select avg(price) as avg_price from partmaster
+)
+select name,price,avg_price from 
+cte c left join partmaster p 
+on p.price > c.avg_price;
+
+-- Q.10. For all products supplied by Supplier S70, List the part name and total quantity SUPPLIED.
+
+select distinct name,qtysupplied from 
+partmaster p join supldetl s
+on p.pid = s.pid
+where sid = 70;
+

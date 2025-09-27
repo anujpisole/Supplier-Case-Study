@@ -1,0 +1,116 @@
+-- Create database
+CREATE DATABASE Supplier;
+USE Supplier;
+
+-- SupplierMaster
+CREATE TABLE SupplierMaster (
+  SID INT PRIMARY KEY,
+  Name VARCHAR(40) NOT NULL,
+  City CHAR(20) NOT NULL,
+  Grade TINYINT NOT NULL CHECK (Grade > 0 AND Grade < 5)
+) ENGINE=InnoDB;
+
+-- Insert into SupplierMaster
+INSERT INTO SupplierMaster VALUES
+(10,'Usman Khan','Delhi',1),
+(20,'Nitish K','Kanpur',2),
+(30,'Shiva','Mumbai',2),
+(40,'Simran','Raipur',3),
+(50,'Srikanth','HYD',4),
+(60,'Neeraj','Delhi',1),
+(70,'Hament','Delhi',4),
+(80,'SKumar','Surat',2),
+(90,'Sanjay','Nagpur',1),
+(100,'Amit','Kanpur',3),
+(110,'Animesh','Bhopal',3),
+(120,'Gaurav','Chennai',1),
+(130,'Hilay','Rajkot',4),
+(140,'Bhavik','Durgapur',4),
+(150,'Shyamlal','Dehradun',2),
+(160,'Anamika','Roorkee',3),
+(170,'harpreet','Madras',2),
+(180,'Venugopal','Mumbai',1),
+(190,'Hament','Mumbai',1),
+(200,'SKumar','Madras',4),
+(210,'Sanjay','Dehradun',2),
+(220,'Amit','Durgapur',3),
+(230,'Animesh','Delhi',1),
+(240,'Gaurav','Delhi',4);
+
+-- PartMaster
+CREATE TABLE PartMaster (
+  PID TINYINT PRIMARY KEY,
+  Name VARCHAR(40) NOT NULL,
+  Price DECIMAL(10,2) NOT NULL,
+  Category TINYINT NOT NULL, -- Category 1,2,3
+  QtyOnHand INT
+) ENGINE=InnoDB;
+
+INSERT INTO PartMaster VALUES
+(1,'Lights',1000,1,1200),
+(2,'Batteries',5600,1,500),
+(3,'Engines',67000,2,4000),
+(4,'Tyres',2400,3,5000),
+(5,'Tubes',700,3,7800),
+(6,'Screws',15,2,2000),
+(7,'Mirrors',1000,1,400),
+(8,'Clutches',1500,3,1000),
+(9,'Bolts',400,1,12000),
+(10,'Nuts',200,1,25000),
+(11,'Washers',300,2,4000),
+(12,'Gaskets',2400,3,5000),
+(13,'Hammers',2000,2,1800),
+(14,'Bedsheets',150,1,2200),
+(15,'Blankets',350,1,850),
+(16,'Windscreens',1800,3,350);
+
+-- SupplyDetails
+CREATE TABLE SuplDetl (
+  PID TINYINT NOT NULL,
+  SID INT NOT NULL,
+  DOS DATETIME NOT NULL,
+  CITY VARCHAR(40) NOT NULL,
+  QTYSUPPLIED INT NOT NULL,
+  FOREIGN KEY (PID) REFERENCES PartMaster(PID),
+  FOREIGN KEY (SID) REFERENCES SupplierMaster(SID)
+) ENGINE=InnoDB;
+
+-- Insert into SuplDetl
+INSERT INTO SuplDetl VALUES
+(2,30,'2019-05-21','Delhi',45),
+(3,60,'2019-06-25','Mumbai',80),
+(1,40,'2019-06-30','Mumbai',120),
+(5,10,'2019-07-02','Delhi',45),
+(2,30,'2019-07-10','Kanpur',50),
+(4,50,'2019-07-11','HYD',150),
+(11,20,'2020-05-21','Bhopal',85),
+(13,70,'2020-06-15','Chennai',100),
+(11,20,'2020-06-10','Dehradun',110),
+(15,50,'2022-07-02','Dehradun',50),
+(12,40,'2022-07-10','HYD',250),
+(14,30,'2022-07-11','Bhopal',450),
+(16,30,'2022-09-01','Bhopal',155),
+(3,60,'2022-09-05','Madras',180),
+(1,40,'2021-06-30','HYD',200),
+(5,10,'2022-07-02','Delhi',255),
+(12,30,'2022-07-10','Kanpur',350),
+(8,50,'2019-11-11','HYD',185),
+(6,70,'2021-05-21','Rajkot',150),
+(10,100,'2022-06-25','Roorkee',600),
+(8,80,'2022-07-30','Surat',720),
+(7,90,'2020-07-02','Mumbai',450),
+(9,110,'2020-07-10','Nagpur',350),
+(10,150,'2020-07-11','Madras',225),
+(6,70,'2022-05-21','Chennai',150),
+(10,100,'2022-05-15','HYD',600),
+(8,80,'2022-06-13','Nagpur',720),
+(7,90,'2022-07-12','Dehradun',450),
+(9,110,'2022-07-11','Bhopal',350),
+(10,150,'2022-08-15','HYD',225),
+(16,70,'2019-04-11','Chennai',100),
+(1,100,'2021-08-20','HYD',700),
+(12,80,'2020-04-15','Nagpur',740),
+-- this one has PID=17 which does not exist in PartMaster, remove or add corresponding part first
+-- (17,90,'2020-06-01','Dehradun',400),
+(11,110,'2020-06-05','Bhopal',300),
+(10,150,'2021-08-05','HYD',160);

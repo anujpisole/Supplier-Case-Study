@@ -1,0 +1,40 @@
+-- Q.1. List the month-wise average supply of parts supplied for all parts. Provide the information only if the average is higher than 250.
+
+select month(dos) as supp_month ,
+	   avg(qtysupplied) as supp_qty
+from supldetl group by supp_month having supp_qty > 250;
+
+-- Q.2. List the names of the Suppliers who do not supply part with PID ‘1’.
+
+select * from partmaster;
+select * from supldetl;
+select * from suppliermaster;
+
+select distinct name from suppliermaster where sid not in (
+select sid from supldetl where pid = '1');
+
+-- Q.3. List the part id, name, price and difference between price and average price of all parts.
+
+select pid,name,price,(price - (select round(avg(price),0) from partmaster)) from partmaster group by  pid,name,price;
+
+select avg(price) from partmaster;
+
+-- Q.4. List the names of the suppliers who have supplied at least Two parts where the quantity supplied is lower than 500.
+
+select s.name , count(p.name) as cnt  from
+partmaster p join supldetl sd 
+on (p.pid = sd.PID) join suppliermaster s
+on (sd.sid = s.SID) 
+where sd.QTYSUPPLIED < 500 group by s.name having count(p.name) >= 2 ;
+
+
+-- Q.5. List the names of the suppliers who live in a city where no supply has been made. -- it means supplier iD should matched in both table but city should not be matched.
+
+select * from partmaster;
+select * from supldetl;
+select * from suppliermaster;
+
+select distinct name , s.city from 
+suppliermaster s join supldetl sd 
+on s.sid = sd.sid 
+where s.city != sd.city order by name;
